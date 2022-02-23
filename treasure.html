@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find the treasure</title>
+  </head>
+  <body>
+    <h1 id="heading">Найди клад!</h1>
+
+    <div>
+      <img
+        id="map"
+        width="400"
+        height="400"
+        src="http://nostarch.com/images/treasuremap.png"
+      />
+    </div>
+
+    <p id="distance"></p>
+
+    <script>
+      const getRandomNUmber = (min, max) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      };
+
+      const getDistance = (e, target) => {
+        const diffX = e.offsetX - target.x;
+        const diffY = e.offsetY - target.y;
+
+        return Math.sqrt(diffY ** 2 + diffY ** 2);
+      };
+
+      const getDistanceHint = (distance) => {
+        if (distance < 10) {
+          return 'Обожжешься';
+        }
+
+        if (distance < 20) {
+          return 'Очень горячо';
+        }
+
+        if (distance < 40) {
+          return 'Горячо';
+        }
+
+        if (distance < 60) {
+          return 'Теплее теплого';
+        }
+
+        if (distance < 80) {
+          return 'Тепло';
+        }
+
+        if (distance < 160) {
+          return 'Холодно';
+        }
+
+        if (distance < 240) {
+          return 'Холоднее холодного';
+        }
+
+        if (distance < 320) {
+          return 'Очень холодно';
+        }
+
+        return 'Замерзнешь!';
+      };
+
+      let clicks = 0;
+      const maxClicks = 5;
+      const width = 500;
+      const height = 500;
+      const target = {
+        x: getRandomNUmber(0, width),
+        y: getRandomNUmber(0, height),
+      };
+
+      const mapEl = document.querySelector('#map');
+      const distanceEl = document.querySelector('#distance');
+
+      mapEl.width = width;
+      mapEl.height = height;
+
+      mapEl.addEventListener('click', (e) => {
+        clicks++;
+
+        const distance = getDistance(e, target);
+        const distanceHint = getDistanceHint(distance);
+        distanceEl.innerText = `${distanceHint}, осталось кликов ${
+          maxClicks - clicks
+        }`;
+
+        if (distance < 8 || clicks === maxClicks) {
+          distanceEl.innerText = '';
+
+          setTimeout(() => {
+            distance < 8 && alert(`Клад найден! Сделано кликов: ${clicks}`);
+            clicks === maxClicks && alert('КОНЕЦ ИГРЫ');
+            clicks = 0;
+          }, 0);
+        }
+      });
+    </script>
+  </body>
+</html>
