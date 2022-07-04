@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Игра виселица</title>
+  </head>
+  <body>
+    <h1>Виселица</h1>
+
+    <script>
+      const words = [
+        'банан' /* , 'макака', 'превосходный', 'ноутбук', 'слон' */,
+      ];
+      const word = words[Math.floor(Math.random() * words.length)];
+      let remainingLetters = word.length;
+      let attempt = 0;
+      const maxAttempts = Math.floor(word.length * 1.5);
+
+      const answers = new Array(word.length).fill('_');
+
+      while (remainingLetters && maxAttempts > attempt) {
+        attempt++;
+
+        const answer = prompt(
+          `Загадано слово: ${answers.join(
+            ' '
+          )}. Попытка ${attempt} из ${maxAttempts}. Введи одну букву`
+        );
+
+        if (answer === null) {
+          break;
+        }
+
+        if (answer.length !== 1) {
+          attempt--;
+          alert('Должна быть введена одна буква');
+          continue;
+        }
+
+        if (word.includes(answer) && !answers.includes(answer)) {
+          [...word].forEach((v, i) => {
+            if (v === answer) {
+              answers[i] = answer;
+              remainingLetters--;
+            }
+          });
+        }
+      }
+
+      if (!remainingLetters) {
+        alert(`Отлично! Ты победил использовав ${attempt} попыток`);
+      } else if (attempt === maxAttempts) {
+        alert(
+          `Ты использовал все ${maxAttempts} попыток. Повезет в другой раз!`
+        );
+      } else {
+        alert('Приходи еще!');
+      }
+    </script>
+  </body>
+</html>

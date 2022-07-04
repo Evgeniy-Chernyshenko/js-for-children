@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Header click</title>
+  </head>
+  <body>
+    <h1>Header</h1>
+    <style>
+      h1 {
+        display: inline;
+        cursor: pointer;
+      }
+    </style>
+    <script>
+      let currentClicks = 0;
+      const headerEl = document.querySelector('h1');
+      let currentLeft = 0;
+      let currentTop = 0;
+      headerEl.style.position = 'relative';
+      const maxLeft = 200;
+      const maxTop = 200;
+      const incrementStep = 1;
+      let currentDirection = 'right';
+      let interval;
+      const intervalMsDecrement = 2;
+      let clickEventListene;
+      const totalClicks = 10;
+
+      let intervalMs = 24;
+      headerEl.textContent = currentClicks;
+
+      const clickHandler = () => {
+        clearInterval(interval);
+        currentClicks++;
+        headerEl.textContent = currentClicks;
+
+        if (currentClicks < totalClicks) {
+          intervalMs -= intervalMsDecrement;
+          startInterval();
+        } else {
+          headerEl.removeEventListener('click', clickHandler);
+          alert('Вы победили!');
+        }
+      };
+
+      clickEventListener = headerEl.addEventListener('click', clickHandler);
+
+      const startInterval = () => {
+        interval = setInterval(() => {
+          if (currentDirection === 'right') {
+            currentLeft += incrementStep;
+            headerEl.style.left = `${currentLeft}px`;
+
+            if (currentLeft >= maxLeft) {
+              currentDirection = 'bottom';
+            }
+          }
+
+          if (currentDirection === 'bottom') {
+            currentTop += incrementStep;
+            headerEl.style.top = `${currentTop}px`;
+
+            if (currentTop === maxTop) {
+              currentDirection = 'left';
+            }
+          }
+
+          if (currentDirection === 'left') {
+            currentLeft -= incrementStep;
+            headerEl.style.left = `${currentLeft}px`;
+
+            if (currentLeft === 0) {
+              currentDirection = 'top';
+            }
+          }
+
+          if (currentDirection === 'top') {
+            currentTop -= incrementStep;
+            headerEl.style.top = `${currentTop}px`;
+
+            if (currentTop === 0) {
+              currentDirection = 'right';
+            }
+          }
+        }, intervalMs);
+      };
+
+      startInterval();
+    </script>
+  </body>
+</html>
